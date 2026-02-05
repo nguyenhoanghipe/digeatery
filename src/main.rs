@@ -2,12 +2,14 @@
 // need dioxus
 use dioxus::prelude::*;
 
-use views::template::{Blog, Home, Navbar};
-
 /// Define a components module that contains all shared components for our app.
 mod components;
 /// Define a views module that contains the UI for all Layouts and Routes for our app.
 mod views;
+mod template;
+
+use template::{Navbar, Template, Blog};
+use views::{Home};
 
 /// The Route enum is used to define the structure of internal routes in our app. All route enums need to derive
 /// the [`Routable`] trait, which provides the necessary methods for the router to work.
@@ -17,13 +19,15 @@ mod views;
 #[derive(Debug, Clone, Routable, PartialEq)]
 #[rustfmt::skip]
 enum Route {
+    #[route("/")]
+        Home {},
     // The layout attribute defines a wrapper for all routes under the layout. Layouts are great for wrapping
     // many routes with a common UI like a navbar.
     #[layout(Navbar)]
         // The route attribute defines the URL pattern that a specific route matches. If that pattern matches the URL,
         // the component for that route will be rendered. The component name that is rendered defaults to the variant name.
-        #[route("/template/home")]
-        Home {},
+        #[route("/template")]
+        Template {},
         // The route attribute can include dynamic parameters that implement [`std::str::FromStr`] and [`std::fmt::Display`] with the `:` syntax.
         // In this case, id will match any integer like `/blog/123` or `/blog/-456`.
         #[route("/template/blog/:id")]

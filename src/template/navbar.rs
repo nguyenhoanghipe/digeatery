@@ -16,7 +16,7 @@ pub fn Navbar() -> Element {
         div {
             id: "navbar",
             Link {
-                to: Route::Home {},
+                to: Route::Template {},
                 "Home"
             }
             Link {

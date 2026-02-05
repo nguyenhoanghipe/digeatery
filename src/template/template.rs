@@ -1,9 +1,9 @@
-use crate::components::{Echo, Hero};
+use crate::template::{Echo, Hero};
 use dioxus::prelude::*;
 
 /// The Home page component that will be rendered when the current route is `[Route::Home]`
 #[component]
-pub fn Home() -> Element {
+pub fn Template() -> Element {
     rsx! {
         Hero {}
         Echo {}
