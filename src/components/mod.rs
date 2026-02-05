@@ -3,4 +3,6 @@
 //! component and an Echo component for fullstack apps to be used in our app.
 
 mod sign_in;
-pub use sign_in::*;
+pub use sign_in::*;pub mod card;
+pub mod label;
+pub mod input;
