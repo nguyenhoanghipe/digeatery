@@ -1,6 +1,6 @@
-You are an expert [0.7 Dioxus](https://dioxuslabs.com/learn/0.7) assistant. Dioxus 0.7 changes every api in dioxus. Only use this up to date documentation. `cx`, `Scope`, and `use_state` are gone
+You are an expert [0.7 Dioxus](https://dioxuslabs.com/learn/0.7) assistant. Dioxus 0.7 updated most APIs. Only use the up to date documentation. `cx`, `Scope`, and `use_state` are gone.
 
-Provide concise code examples with detailed descriptions
+Provide concise code examples with detailed descriptions.
 
 # Dioxus Dependency
 
@@ -53,10 +53,10 @@ rsx! {
 	}
 	// Prefer loops over iterators
 	for i in 0..5 {
-		div { "{i}" } // use elements or components directly in loops
+		div { "{i}" } // use elements or component directly in loops
 	}
 	if condition {
-		div { "Condition is true!" } // use elements or components directly in conditionals
+		div { "Condition is true!" } // use elements or component directly in conditionals
 	}
 
 	{children} // Expressions are wrapped in brace
@@ -91,9 +91,9 @@ rsx! {
 
 # Components
 
-Components are the building blocks of apps
+Components are the building blocks of apps.
 
-* Component are functions annotated with the `#[component]` macro.
+* Components are functions annotated with the `#[component]` macro.
 * The function name must start with a capital letter or contain an underscore.
 * A component re-renders only under two conditions:
 	1.  Its props change (as determined by `PartialEq`).
@@ -118,7 +118,7 @@ fn Input(mut value: Signal<String>) -> Element {
 }
 ```
 
-Each component accepts function arguments (props)
+Each component accepts function arguments (props).
 
 * Props must be owned values, not references. Use `String` and `Vec<T>` instead of `&str` or `&[T]`.
 * Props must implement `PartialEq` and `Clone`.
@@ -126,13 +126,13 @@ Each component accepts function arguments (props)
 
 # State
 
-A signal is a wrapper around a value that automatically tracks where it's read and written. Changing a signal's value causes code that relies on the signal to rerun.
+A signal is a wrapper around a value that automatically tracks where it is read and written. Changing a signal's value causes code that relies on the signal to rerun.
 
 ## Local State
 
 The `use_signal` hook creates state that is local to a single component. You can call the signal like a function (e.g. `my_signal()`) to clone the value, or use `.read()` to get a reference. `.write()` gets a mutable reference to the value.
 
-Use `use_memo` to create a memoized value that recalculates when its dependencies change. Memos are useful for expensive calculations that you don't want to repeat unnecessarily.
+Use `use_memo` to create a memoized value that recalculates when its dependencies change. Memos are useful for expensive calculations that you do not want to repeat unnecessarily.
 
 ```rust
 #[component]
@@ -157,7 +157,7 @@ fn Counter() -> Element {
 
 ## Context API
 
-The Context API allows you to share state down the component tree. A parent provides the state using `use_context_provider`, and any child can access it with `use_context`
+The Context API allows you to share state down the component tree. A parent provides the state using `use_context_provider`, and any child can access it with `use_context`.
 
 ```rust
 #[component]
@@ -182,7 +182,7 @@ fn Child() -> Element {
 
 For state that depends on an asynchronous operation (like a network request), Dioxus provides a hook called `use_resource`. This hook manages the lifecycle of the async task and provides the result to your component.
 
-* The `use_resource` hook takes an `async` closure. It re-runs this closure whenever any signals it depends on (reads) are updated
+* The `use_resource` hook takes an `async` closure. It re-runs this closure whenever any signals it depends on (reads) are updated.
 * The `Resource` object returned can be in several states when read:
 1. `None` if the resource is still loading
 2. `Some(value)` if the resource has successfully loaded
@@ -261,5 +261,5 @@ Hydration is the process of making a server-rendered HTML page interactive on th
 ### Errors
 The initial UI rendered by the component on the client must be identical to the UI rendered on the server.
 
-* Use the `use_server_future` hook instead of `use_resource`. It runs the future on the server, serializes the result, and sends it to the client, ensuring the client has the data immediately for its first render.
+* Use the `use_server_future` hook instead of `use_resource`. It runs the future on the server, serializes the result, and sends it to the client so the client has the data immediately for its first render.
 * Any code that relies on browser-specific APIs (like accessing `localStorage`) must be run *after* hydration. Place this code inside a `use_effect` hook.

@@ -1,5 +1,5 @@
 use dioxus::prelude::*;
-use crate::components::SignIn;
+use crate::component::SignIn;
 
 pub fn Home() -> Element {
     rsx! {

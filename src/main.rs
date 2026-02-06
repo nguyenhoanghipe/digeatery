@@ -2,20 +2,21 @@
 // need dioxus
 use dioxus::prelude::*;
 
-/// Define a components module that contains all shared components for our app.
-mod components;
-/// Define a views module that contains the UI for all Layouts and Routes for our app.
-mod views;
+/// Define a component module that contains all shared component for our app.
+mod component;
+/// Define a page module that contains the UI for all Layouts and Routes for our app.
+mod page;
 mod template;
+mod lib;
 
 use template::{Navbar, Template, Blog};
-use views::{Home};
+use page::{Home};
 
 /// The Route enum is used to define the structure of internal routes in our app. All route enums need to derive
 /// the [`Routable`] trait, which provides the necessary methods for the router to work.
 ///
 /// Each variant represents a different URL pattern that can be matched by the router. If that pattern is matched,
-/// the components for that route will be rendered.
+/// the component for that route will be rendered.
 #[derive(Debug, Clone, Routable, PartialEq)]
 #[rustfmt::skip]
 enum Route {
@@ -57,14 +58,14 @@ fn main() {
 fn App() -> Element {
     // The `rsx!` macro lets us define HTML inside of rust. It expands to an Element with all of our HTML inside.
     rsx! {
-        // In addition to element and text (which we will see later), rsx can contain other components. In this case,
+        // In addition to element and text (which we will see later), rsx can contain other component. In this case,
         // we are using the `document::Link` component to add a link to our favicon and main CSS file into the head of our app.
         document::Link { rel: "icon", href: FAVICON }
         document::Link { rel: "stylesheet", href: MAIN_CSS }
         document::Link { rel: "stylesheet", href: TAILWIND_CSS }
 
         // The router component renders the route enum we defined above. It will handle synchronization of the URL and render
-        // the layouts and components for the active route.
+        // the layouts and component for the active route.
         Router::<Route> {}
     }
 }
