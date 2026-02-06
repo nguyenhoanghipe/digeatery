@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 
-const ECHO_CSS: Asset = asset!("/assets/styling/echo.css");
+const ECHO_CSS: Asset = asset!("./echo.css");
 
 /// Echo component that demonstrates fullstack server functions.
 #[component]
