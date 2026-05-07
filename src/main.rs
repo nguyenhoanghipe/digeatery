@@ -6,10 +6,12 @@ mod api;
 /// Define a component module that contains all shared component for our app.
 mod component;
 mod lib;
+
 /// Define a page module that contains the UI for all Layouts and Routes for our app.
 mod page;
 mod template;
 
+use component::ErrorLayout;
 use page::Home;
 use template::{Blog, Navbar, Template};
 
@@ -21,6 +23,7 @@ use template::{Blog, Navbar, Template};
 #[derive(Debug, Clone, Routable, PartialEq)]
 #[rustfmt::skip]
 enum Route {
+    #[layout(ErrorLayout)]
     #[route("/")]
         Home {},
     // The layout attribute defines a wrapper for all routes under the layout. Layouts are great for wrapping
@@ -46,6 +49,10 @@ const MAIN_CSS: Asset = asset!("/assets/styling/main.css");
 const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
 
 fn main() {
+    // Non-web apps don't know server URL in live envs
+    #[cfg(not(feature = "server"))]
+    dioxus::fullstack::set_server_url("https://hot-dog.fly.dev");
+
     // The `launch` function is the main entry point for a dioxus app. It takes a component and renders it with the platform feature
     // you have enabled
     dioxus::launch(App);

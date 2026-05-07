@@ -3,13 +3,11 @@ struct FoodDishImageResponse {
     image: String,
 }
 
-pub async fn get_food_dish_image() -> String {
+pub async fn get_food_dish_image() -> Result<String, reqwest::Error> {
     let response = reqwest::get("https://foodish-api.com/api")
-        .await
-        .unwrap()
+        .await?
         .json::<FoodDishImageResponse>()
-        .await
-        .unwrap();
+        .await?;
 
-    response.image
+    Ok(response.image)
 }

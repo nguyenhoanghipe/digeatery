@@ -1,3 +1,6 @@
+pub mod auth;
 mod food_dish;
+mod menu;
 
-pub use food_dish::get_food_dish_image;
+pub use food_dish::*;
+pub use menu::*;
