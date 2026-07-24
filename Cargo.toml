@@ -7,10 +7,12 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-dioxus = { version = "0.7.1", features = ["router", "fullstack"] }
+dioxus = { version = "0.7.9", features = ["router", "fullstack"] }
 dioxus-primitives = { git = "https://github.com/DioxusLabs/components", version = "0.0.1", default-features = false }
-reqwest = { version = "0.13.2", features = ["json"] }
-serde = { version = "1.0.228", features = ["derive"] }
+reqwest = { version = "0.13.4", features = ["json"] }
+serde = { version = "1.0.229", features = ["derive"] }
+tokio = { version = "1.53.1", features = ["full"], optional = true }
+
 
 [features]
 default = ["web"]
@@ -21,4 +23,4 @@ desktop = ["dioxus/desktop"]
 # The feature that are only required for the mobile = ["dioxus/mobile"] build target should be optional and only enabled in the mobile = ["dioxus/mobile"] feature
 mobile = ["dioxus/mobile"]
 # The feature that are only required for the server = ["dioxus/server"] build target should be optional and only enabled in the server = ["dioxus/server"] feature
-server = ["dioxus/server"]
+server = ["dioxus/server", "dep:tokio"]
