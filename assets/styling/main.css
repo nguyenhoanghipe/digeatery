@@ -1,4 +1,12 @@
-/* template styles */
+/*
+body {
+    background-color: #0f1116;
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 20px;
+}
+*/
+
 #hero {
     margin: 0;
     display: flex;

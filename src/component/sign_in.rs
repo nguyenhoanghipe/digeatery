@@ -1,26 +1,26 @@
 use dioxus::prelude::*;
-use crate::lib::ui::{Button, ButtonVariant, Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle, Input, Label};
+
+use crate::common::ui::{button::{Button, ButtonVariant}, card::{Card, CardAction, CardContent, CardDescription, CardFooter, CardHeader, CardTitle}, input::Input, label::Label};
 
 #[component]
 pub fn SignIn() -> Element {
-    
     let mut email = use_signal(String::new);
     let mut password = use_signal(String::new);
-    
+
     let handle_email_change = move |evt: Event<FormData>| {
         email.set(evt.data.value());
         debug!("{}", email());
     };
-   
+
     let handle_password_change = move |evt: Event<FormData>| {
         password.set(evt.data.value());
         debug!("{}", password());
     };
-    
+
     let submit = move |evt| {
         println!("{:?}", evt);
     };
-    
+
     rsx! {
         Card { style: "width: 100%; max-width: 24rem;",
             CardHeader {
@@ -31,7 +31,7 @@ pub fn SignIn() -> Element {
                 }
             }
             CardContent {
-                form {
+                form { id: "login-form",
                     div { style: "display: flex; flex-direction: column; gap: 1.5rem;",
                         div { style: "display: grid; gap: 0.5rem;",
                             Label { html_for: "email", "Email" }
@@ -39,7 +39,7 @@ pub fn SignIn() -> Element {
                                 id: "email",
                                 r#type: "email",
                                 placeholder: "m@example.com",
-                                onchange: handle_email_change
+                                onchange: handle_email_change,
                             }
                         }
                         div { style: "display: grid; gap: 0.5rem;",
@@ -51,16 +51,25 @@ pub fn SignIn() -> Element {
                                     "Forgot your password?"
                                 }
                             }
-                            Input { id: "password", r#type: "password", onchange: handle_password_change }
+                            Input {
+                                id: "password",
+                                r#type: "password",
+                                onchange: handle_password_change,
+                            }
                         }
                     }
                 }
             }
             CardFooter { style: "flex-direction: column; gap: 0.5rem;",
-                Button { r#type: "submit", style: "width: 100%;", onclick: submit, "Login" }
+                Button {
+                    r#type: "submit",
+                    form: "login-form",
+                    style: "width: 100%;",
+                    onclick: submit,
+                    "Login"
+                }
                 Button { variant: ButtonVariant::Outline, style: "width: 100%;", "Login with Google" }
             }
         }
     }
 }
-

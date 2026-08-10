@@ -1,3 +1,3 @@
-mod food_dish;
+mod dish;
 
-pub use food_dish::get_food_dish_image;
+pub use dish::*;
