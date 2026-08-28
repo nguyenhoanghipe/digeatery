@@ -3,21 +3,22 @@
 use dioxus::prelude::*;
 
 mod api;
+mod common;
 /// Define a component module that contains all shared component for our app.
 mod component;
-mod lib;
 /// Define a page module that contains the UI for all Layouts and Routes for our app.
 mod page;
 mod template;
 
 use page::Home;
 use template::{Blog, Navbar, Template};
+use component::PageNotFound;
 
 /// The Route enum is used to define the structure of internal routes in our app. All route enums need to derive
 /// the [`Routable`] trait, which provides the necessary methods for the router to work.
 ///
 /// Each variant represents a different URL pattern that can be matched by the router. If that pattern is matched,
-/// the component for that route will be rendered.
+/// the components for that route will be rendered.
 #[derive(Debug, Clone, Routable, PartialEq)]
 #[rustfmt::skip]
 enum Route {
@@ -36,6 +37,12 @@ enum Route {
         // Fields of the route variant will be passed to the component as props. In this case, the blog component must accept
         // an `id` prop of type `i32`.
         Blog { id: i32 },
+    #[end_layout]
+
+    #[route("/:..route")]
+    PageNotFound {
+        route: Vec<String>,
+    },
 }
 
 // We can import assets in dioxus with the `asset!` macro. This macro takes a path to an asset relative to the crate root.
@@ -44,10 +51,24 @@ const FAVICON: Asset = asset!("/assets/favicon.ico");
 // The asset macro also minifies some assets like CSS and JS to make bundled smaller
 const MAIN_CSS: Asset = asset!("/assets/styling/main.css");
 const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
+const DIOXUS_CSS: Asset = asset!("/assets/dx-components-theme.css");
 
 fn main() {
+    // Run `serve()` on the server only
+    #[cfg(feature = "server")]
+    dioxus::serve(|| async move {
+        // Create a new router for our app using the `router` function
+        let mut router = dioxus::server::router(App);
+
+        // .. customize the router, adding layers and new routes
+
+        // And then return the router
+        Ok(router)
+    });
+
     // The `launch` function is the main entry point for a dioxus app. It takes a component and renders it with the platform feature
     // you have enabled
+    #[cfg(not(feature = "server"))]
     dioxus::launch(App);
 }
 
@@ -59,14 +80,15 @@ fn main() {
 fn App() -> Element {
     // The `rsx!` macro lets us define HTML inside of rust. It expands to an Element with all of our HTML inside.
     rsx! {
-        // In addition to element and text (which we will see later), rsx can contain other component. In this case,
+        // In addition to element and text (which we will see later), rsx can contain other components. In this case,
         // we are using the `document::Link` component to add a link to our favicon and main CSS file into the head of our app.
         document::Link { rel: "icon", href: FAVICON }
         document::Link { rel: "stylesheet", href: MAIN_CSS }
         document::Link { rel: "stylesheet", href: TAILWIND_CSS }
+        document::Link { rel: "stylesheet", href: DIOXUS_CSS }
 
         // The router component renders the route enum we defined above. It will handle synchronization of the URL and render
-        // the layouts and component for the active route.
+        // the layouts and components for the active route.
         Router::<Route> {}
     }
 }

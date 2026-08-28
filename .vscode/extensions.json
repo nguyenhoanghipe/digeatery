@@ -1,0 +1,9 @@
+{
+	"recommendations": [
+		"tamasfe.even-better-toml",
+		"rust-lang.rust-analyzer",
+		"dioxuslabs.dioxus",
+		"vadimcn.vscode-lldb",
+		"bradlc.vscode-tailwindcss"
+	]
+}

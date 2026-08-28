@@ -1,8 +1,8 @@
 use dioxus::prelude::*;
-use crate::component::SignIn;
+use crate::component::{Menu, SignIn};
 
 pub fn Home() -> Element {
     rsx! {
-        SignIn {}
+        Menu {}
     }
 }
