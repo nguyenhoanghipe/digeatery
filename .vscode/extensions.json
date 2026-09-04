@@ -1,9 +1,14 @@
 {
-	"recommendations": [
-		"tamasfe.even-better-toml",
-		"rust-lang.rust-analyzer",
-		"dioxuslabs.dioxus",
-		"vadimcn.vscode-lldb",
-		"bradlc.vscode-tailwindcss"
-	]
+  "recommendations": [
+    "tamasfe.even-better-toml",
+    "rust-lang.rust-analyzer",
+    "dioxuslabs.dioxus",
+    "vadimcn.vscode-lldb",
+    "bradlc.vscode-tailwindcss"
+  ],
+  // following guide: https://dioxuslabs.com/learn/0.7/essentials/ui/styling#vscode-integration
+  "tailwindCSS.experimental.classRegex": ["class: \"(.*)\""],
+  "tailwindCSS.includeLanguages": {
+    "rust": "html"
+  }
 }

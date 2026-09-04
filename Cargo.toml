@@ -14,16 +14,19 @@ dioxus-ssr = "0.7.10"
 palette = { version = "0.7.6", default-features = false }
 reqwest = { version = "0.13.4", features = ["json"] }
 serde = { version = "1.0.229", features = ["derive"] }
-time = { version = "0.3.44", default-features = false }
+# 'default-features = false' disables default features from dep graph
+time = { version = "0.3.44", default-features = false, features = ["serde", "serde-human-readable"] }
+# 'optional = true' removes a dep from all features' compilation, unless specified
 tokio = { version = "1.53.1", features = ["full"], optional = true }
 
 
 [features]
-default = ["web", "server"]
+default = ["web"]
 # The feature that are only required for the server = ["dioxus/server"] build target should be optional and only enabled in the server = ["dioxus/server"] feature
 server = ["dioxus/server", "dep:tokio"]
 # The feature that are only required for the web = ["dioxus/web"] build target should be optional and only enabled in the web = ["dioxus/web"] feature
-web = ["dioxus/web"]
+# 'time/wasm-bindgen' enables the feature, while 'dep/time' works only if 'time' is optional dep
+web = ["dioxus/web", "time/wasm-bindgen"]
 # The feature that are only required for the desktop = ["dioxus/desktop"] build target should be optional and only enabled in the desktop = ["dioxus/desktop"] feature
 desktop = ["dioxus/desktop"]
 # The feature that are only required for the mobile = ["dioxus/mobile"] build target should be optional and only enabled in the mobile = ["dioxus/mobile"] feature
