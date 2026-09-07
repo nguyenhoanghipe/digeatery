@@ -10,9 +10,9 @@ mod component;
 mod page;
 mod template;
 
+use component::PageNotFound;
 use page::Home;
 use template::{Blog, Navbar, Template};
-use component::PageNotFound;
 
 /// The Route enum is used to define the structure of internal routes in our app. All route enums need to derive
 /// the [`Routable`] trait, which provides the necessary methods for the router to work.
@@ -45,13 +45,13 @@ enum Route {
     },
 }
 
-// We can import assets in dioxus with the `asset!` macro. This macro takes a path to an asset relative to the crate root.
+// We can import asset in dioxus with the `asset!` macro. This macro takes a path to an asset relative to the crate root.
 // The macro returns an `Asset` type that will display as the path to the asset in the browser or a local path in desktop bundles.
-const FAVICON: Asset = asset!("/assets/favicon.ico");
-// The asset macro also minifies some assets like CSS and JS to make bundled smaller
-const MAIN_CSS: Asset = asset!("/assets/styling/main.css");
-const TAILWIND_CSS: Asset = asset!("/assets/tailwind.css");
-const DIOXUS_CSS: Asset = asset!("/assets/dx-components-theme.css");
+const FAVICON: Asset = asset!("/asset/favicon.ico");
+// The asset macro also minifies some asset like CSS and JS to make bundled smaller
+const MAIN_CSS: Asset = asset!("/asset/style/main.css");
+const TAILWIND_CSS: Asset = asset!("/asset/tailwind.css");
+const DIOXUS_CSS: Asset = asset!("/asset/dx-components-theme.css");
 
 fn main() {
     // Run `serve()` on the server only

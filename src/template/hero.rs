@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 
-const HEADER_SVG: Asset = asset!("/assets/header.svg");
+const HEADER_SVG: Asset = asset!("/asset/header.svg");
 
 #[component]
 pub fn Hero() -> Element {

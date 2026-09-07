@@ -1,7 +1,7 @@
 # Development
 
-Your new jumpstart project includes basic organization with an organized `assets` folder and a `components` folder.
-If you chose to develop with the router feature, you will also have a `views` folder.
+Your new jumpstart project includes basic organization with an organized `assets` folder and a `components` folder. If
+you chose to develop with the router feature, you will also have a `views` folder.
 
 ```
 project/
@@ -23,7 +23,8 @@ project/
 
 As of Dioxus 0.7, there no longer is a need to manually install tailwind. Simply `dx serve` and you're good to go!
 
-Automatic tailwind is supported by checking for a file called `tailwind.css` in your app's manifest directory (next to Cargo.toml). To customize the file, use the dioxus.toml:
+Automatic tailwind is supported by checking for a file called `tailwind.css` in your app's manifest directory (next to
+Cargo.toml). To customize the file, use the dioxus.toml:
 
 ```toml
 [application]
@@ -40,7 +41,7 @@ To use tailwind plugins or manually customize tailwind, you can can install the 
 3. Run the following command in the root of the project to start the Tailwind CSS compiler:
 
 ```bash
-npx @tailwindcss/cli -i ./input.css -o ./assets/tailwind.css --watch
+npx @tailwindcss/cli -i ./input.css -o ./asset/tailwind.css --watch
 ```
 
 ### Serving Your App
@@ -52,6 +53,7 @@ dx serve --platform web
 ```
 
 To run for a different platform, use the `--platform platform` flag. E.g.
+
 ```bash
 dx serve --platform desktop
 ```

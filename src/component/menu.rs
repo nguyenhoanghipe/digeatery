@@ -13,8 +13,8 @@ pub fn Menu() -> Element {
             RadioItem { value: "", index: 3usize, "1234"}
         }
 
-        // img { src: asset!("/assets/image/beef-pho.jpg").to_string() }
-        // img { src: asset!("/assets/image/creme-caramel.png").to_string() }
+        // img { src: asset!("/asset/image/beef-pho.jpg").to_string() }
+        // img { src: asset!("/asset/image/creme-caramel.png").to_string() }
         // match &*dishes.read() {
         //     Some(Ok(items)) => rsx! {
         //         for item in items {

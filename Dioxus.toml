@@ -1,11 +1,14 @@
 [application]
+name = "digeatery"
+asset_dir = "asset" # default "assets"
+tailwind_output = "asset/tailwind.css" # default "assets/tailwind.css"
 
 [web.app]
 
 # HTML title tag content
 title = "digeatery"
 
-# include `assets` in web platform
+# include `asset` in web platform
 [web.resource]
 
 # Additional CSS style files
