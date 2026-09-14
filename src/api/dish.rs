@@ -8,7 +8,7 @@ pub struct Dish {
     pub image_url: String,
 }
 
-#[get("/api/dish")]
+#[get("/server/dish")]
 pub async fn get_dish_list() -> Result<Vec<Dish>, ServerFnError> {
     Ok(vec![
         Dish {

@@ -1,14 +1,18 @@
 // The dioxus prelude contains a ton of common items used in dioxus apps. It's a good idea to import wherever you
 // need dioxus
 use dioxus::prelude::*;
+use palette::chromatic_adaptation::AdaptIntoUnclamped;
 
-mod api;
 mod common;
 /// Define a component module that contains all shared component for our app.
 mod component;
 /// Define a page module that contains the UI for all Layouts and Routes for our app.
 mod page;
 mod template;
+mod api;
+
+#[cfg(feature="server")]
+mod server;
 
 use component::PageNotFound;
 use page::Home;
@@ -57,10 +61,16 @@ fn main() {
     // Run `serve()` on the server only
     #[cfg(feature = "server")]
     dioxus::serve(|| async move {
-        // Create a new router for our app using the `router` function
-        let mut router = dioxus::server::router(App);
+        dotenvy::dotenv().ok();
 
-        // .. customize the router, adding layers and new routes
+        // Create a new router for our app using the `router` function
+        let router = dioxus::server::router(App);
+
+        let pool = server::get_db().await?;
+
+        sqlx::migrate!("./migration").run(pool).await?;
+
+        // … customize the router, adding layers and new routes
 
         // And then return the router
         Ok(router)

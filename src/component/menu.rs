@@ -1,4 +1,4 @@
-use crate::api::{get_available_order_date_list, get_dish_list};
+use crate::api::get_available_order_date_list;
 use crate::common::ui::radio_group::{RadioGroup, RadioItem};
 use dioxus::prelude::*;
 
@@ -8,30 +8,24 @@ pub fn Menu() -> Element {
 
     rsx! {
         RadioGroup {
-           RadioItem  { value : "", index: 1usize, "abc" }
-            RadioItem { value: "", index: 3usize, "1223"}
-            RadioItem { value: "", index: 3usize, "1234"}
+            match &*abc.read() {
+                Some(Ok(items)) => rsx! {
+                    for item in items {
+                        RadioItem { value: item.to_string(), index: item.to_julian_day() as usize, {item.to_string()} }
+                    }
+                },
+                Some(Err(error)) => rsx! {
+                    p { "Error: {error}" }
+                },
+
+
+            None => rsx! {
+                    p { "Loading..." }
+                },
+            }
         }
 
         // img { src: asset!("/asset/image/beef-pho.jpg").to_string() }
         // img { src: asset!("/asset/image/creme-caramel.png").to_string() }
-        // match &*dishes.read() {
-        //     Some(Ok(items)) => rsx! {
-        //         for item in items {
-        //             div {
-        //                 h3 { "{item.name}" }
-        //
-        //                 img { src: "{item.image_url}", alt: "{item.name}" }
-        //             }
-        //         }
-        //     },
-        //     Some(Err(error)) => rsx! {
-        //         p { "Error: {error}" }
-        //     },
-        //
-        //     None => rsx! {
-        //         p { "Loading..." }
-        //     },
-        // }
     }
 }
