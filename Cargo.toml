@@ -18,7 +18,7 @@ serde = { version = "1.0.229", features = ["derive"] }
 time = { version = "0.3.44", default-features = false, features = ["serde", "serde-human-readable"] }
 # 'optional = true' removes a dep from all features' compilation, unless specified
 tokio = { version = "1.53.1", features = ["full"], optional = true }
-sqlx = { version = "0.9.0", features = ["runtime-tokio", "postgres", "macros", "migrate"], optional = true }
+sqlx = { version = "0.9.0", features = ["runtime-tokio", "postgres", "macros", "migrate", "time"], optional = true }
 dotenvy = { version = "0.15.7", optional = true }
 
 
@@ -33,3 +33,19 @@ web = ["dioxus/web", "time/wasm-bindgen"]
 desktop = ["dioxus/desktop"]
 # The feature that are only required for the mobile = ["dioxus/mobile"] build target should be optional and only enabled in the mobile = ["dioxus/mobile"] feature
 mobile = ["dioxus/mobile"]
+
+[lints.clippy]
+unwrap_used = "deny"
+expect_used = "deny"
+indexing_slicing = "deny"
+panic = "deny"
+todo = "warn"
+unimplemented = "warn"
+out_of_bounds_indexing = "deny"
+string_slice = "deny"
+get_unwrap = "deny"
+panic_in_result_fn = "deny"
+
+[workspace.metadata.clippy]
+allow-unwrap-in-tests = true
+allow-expect-in-tests = true

@@ -1,7 +1,6 @@
 // The dioxus prelude contains a ton of common items used in dioxus apps. It's a good idea to import wherever you
 // need dioxus
 use dioxus::prelude::*;
-use palette::chromatic_adaptation::AdaptIntoUnclamped;
 
 mod common;
 /// Define a component module that contains all shared component for our app.
@@ -16,6 +15,7 @@ mod server;
 
 use component::PageNotFound;
 use page::Home;
+use page::Admin;
 use template::{Blog, Navbar, Template};
 
 /// The Route enum is used to define the structure of internal routes in our app. All route enums need to derive
@@ -28,6 +28,11 @@ use template::{Blog, Navbar, Template};
 enum Route {
     #[route("/")]
         Home {},
+
+    #[route("/admin")]
+        Admin {},
+
+
     // The layout attribute defines a wrapper for all routes under the layout. Layouts are great for wrapping
     // many routes with a common UI like a navbar.
     #[layout(Navbar)]
@@ -60,15 +65,16 @@ const DIOXUS_CSS: Asset = asset!("/asset/dx-components-theme.css");
 fn main() {
     // Run `serve()` on the server only
     #[cfg(feature = "server")]
-    dioxus::serve(|| async move {
+    serve(|| async move {
         dotenvy::dotenv().ok();
+        let db = server::connect_db().await?;
+        sqlx::migrate!("./migration").run(&db).await?;
+
+
+        let server_state = server::State { db };
 
         // Create a new router for our app using the `router` function
-        let router = dioxus::server::router(App);
-
-        let pool = server::get_db().await?;
-
-        sqlx::migrate!("./migration").run(pool).await?;
+        let router = dioxus::server::router(App).layer(dioxus::server::axum::Extension(server_state));
 
         // … customize the router, adding layers and new routes
 

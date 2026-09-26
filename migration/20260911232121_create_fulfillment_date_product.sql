@@ -8,7 +8,7 @@ CREATE TABLE product
     image_url TEXT           NOT NULL
 );
 
-CREATE TABLE fulfilment_date
+CREATE TABLE fulfillment_date
 (
     id   INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     date DATE NOT NULL UNIQUE
@@ -17,6 +17,6 @@ CREATE TABLE fulfilment_date
 
 CREATE TABLE fulfillment_date_product
 (
-    fulfillment_date_id INTEGER NOT NULL REFERENCES fulfilment_date (id) ON DELETE CASCADE,
+    fulfillment_date_id INTEGER NOT NULL REFERENCES fulfillment_date (id) ON DELETE CASCADE,
     product_id          INTEGER NOT NULL REFERENCES product (id)
 );
