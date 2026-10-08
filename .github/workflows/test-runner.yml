@@ -1,0 +1,19 @@
+name: Test self-hosted runner
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: self-hosted
+
+    steps:
+      - name: Show machine information
+        run: |
+          echo "Hello from GitHub Actions!"
+          echo "Architecture:"
+          uname -m
+          echo "OS:"
+          cat /etc/os-release
+          echo "Podman:"
+          podman --version

@@ -62,3 +62,43 @@ ENTRYPOINT ["/usr/local/app/server"]
 #  -p 8080:8080 \
 #  --env-file .env.container \
 #  digeatery:test
+
+
+
+# attempt to use alpine
+
+#FROM rust:alpine AS chef
+#ENV CARGO_BUILD_JOBS=1
+#RUN apk add --no-cache \
+##    build-base \
+#    pkgconf \
+#    # needed for building dx \
+#    openssl-dev \
+#    # binstall script uses curl \
+#    curl
+#RUN wget -qO- https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | sh
+#RUN cargo binstall cargo-chef --locked -y
+#
+#WORKDIR /app
+#
+#FROM chef AS planner
+#COPY . .
+#RUN cargo chef prepare --recipe-path recipe.json
+#
+#FROM chef AS builder
+#COPY --from=planner /app/recipe.json recipe.json
+#RUN cargo chef cook --release --recipe-path recipe.json
+#COPY . .
+#
+#RUN cargo binstall dioxus-cli --locked -y
+#RUN dx bundle --web --release
+#
+#FROM alpine:latest AS runtime
+##RUN apk add --no-cache ca-certificates
+#WORKDIR /usr/local/app
+#COPY --from=builder /app/target/dx/digeatery/release/web/ ./
+#
+#ENV IP=0.0.0.0
+#ENV PORT=8080
+#EXPOSE 8080
+#ENTRYPOINT [ "/usr/local/app/server" ]
