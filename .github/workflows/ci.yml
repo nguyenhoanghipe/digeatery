@@ -1,0 +1,32 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch: # allow manual triggering of the workflow
+
+jobs:
+  build-and-test:
+    name: Build and test digeatery
+#    runs-on: [self-hosted, Linux, ARM64]
+    runs-on: self-hosted
+
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@v7
+
+      - name: Show environment
+        run: |
+          uname -m
+          rustc --version
+          cargo --version
+
+      - name: Check Rust code
+        run: cargo check
+
+      - name: Run tests
+        run: cargo test
