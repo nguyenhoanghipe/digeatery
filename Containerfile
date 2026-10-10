@@ -19,6 +19,8 @@ FROM chef AS builder
 COPY --from=planner /app/recipe.json recipe.json
 RUN cargo chef cook --release --recipe-path recipe.json
 COPY . .
+RUN cargo check
+RUN cargo test
 
 # Install curl for cargo-binstall
 RUN apt-get update \
@@ -38,9 +40,7 @@ RUN dx bundle --web --release
 # Runtime
 # ============================================================
 FROM debian:stable-slim AS runtime
-#RUN apt-get update \
-#    && apt-get install -y --no-install-recommends ca-certificates \
-#    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates && rm -rf /var/lib/apt/lists/*
 COPY --from=builder /app/target/dx/digeatery/release/web/ /usr/local/app
 ENV PORT=8080
 ENV IP=0.0.0.0

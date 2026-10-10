@@ -1,32 +1,115 @@
-name: ci
+name: CI/CD
 
 on:
   push:
     branches:
       - main
+
   pull_request:
     branches:
       - main
-  workflow_dispatch: # allow manual triggering of the workflow
+
+  workflow_dispatch:
+
+# Provide read-only access to the repository contents for the workflow
+permissions:
+  contents: read
+
+# todo: revise this
+concurrency:
+  group: digeatery-test
+  cancel-in-progress: false
 
 jobs:
-  build-and-test:
-    name: Build and test digeatery
-#    runs-on: [self-hosted, Linux, ARM64]
-    runs-on: self-hosted
+  build-test-deploy:
+    name: Build, test, and deploy to TEST
+    runs-on: [self-hosted, Linux, ARM64]
+    environment: test
 
     steps:
       - name: Check out source code
         uses: actions/checkout@v7
-
       - name: Show environment
         run: |
-          uname -m
-          rustc --version
-          cargo --version
+          set -eu # exit on error, unset variables are errors
+          uname -m # show architecture
+          podman --version 
+      - name: Build and test application image
+        run: |
+          set -eu
+          podman build -t digeatery:test .
+      - name: Verify image
+        run: |
+          set -eu
+          podman image inspect digeatery:test --format 'Image size: {{.Size}} bytes'
+      - name: Validate TEST configuration
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          set -eu
 
-      - name: Check Rust code
-        run: cargo check
+          if [ -z "$DATABASE_URL" ]; then
+            echo "DATABASE_URL is not configured in the test environment."
+            exit 1
+          fi
 
-      - name: Run tests
-        run: cargo test
+          if ! podman network exists digeatery-network; then
+            echo "Podman network digeatery-network does not exist."
+            exit 1
+          fi
+
+          if ! podman container exists digeatery-postgres; then
+            echo "PostgreSQL container digeatery-postgres does not exist."
+            exit 1
+          fi
+
+          if [ "$(podman inspect --format '{{.State.Running}}' digeatery-postgres)" != "true" ]; then
+            echo "PostgreSQL container is not running."
+            podman logs digeatery-postgres
+            exit 1
+          fi
+      - name: Deploy to TEST
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          set -eu
+
+          CONTAINER_NAME="digeatery-app"
+          IMAGE_NAME="digeatery:test"
+          NETWORK_NAME="digeatery-network"
+
+          # Confirm PostgreSQL is attached to the network.
+          if ! podman network inspect "$NETWORK_NAME" \
+            --format '{{JSON .Containers}}' \
+            | grep -q 'digeatery-postgres'; then
+            echo "PostgreSQL is not attached to $NETWORK_NAME."
+            exit 1
+          fi
+
+          # Remove the previous application container.
+          # Do not remove the PostgreSQL container or volume.
+          podman rm --force "$CONTAINER_NAME" 2>/dev/null || true
+
+          # Start the new application container.
+          podman run --detach \
+            --name "$CONTAINER_NAME" \
+            --network "$NETWORK_NAME" \
+            --restart unless-stopped \
+            --publish 8080:8080 \
+            --env DATABASE_URL \
+            "$IMAGE_NAME"
+
+          # Allow time for the application to start.
+          sleep 5
+
+          # Ensure the application process is still running.
+          if [ "$(podman inspect --format '{{.State.Running}}' "$CONTAINER_NAME")" != "true" ]; then
+            echo "Application failed to start."
+            podman logs "$CONTAINER_NAME"
+            exit 1
+          fi
+
+          echo "TEST deployment started successfully."
+          podman ps --filter "name=$CONTAINER_NAME"
